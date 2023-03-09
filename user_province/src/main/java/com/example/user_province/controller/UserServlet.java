@@ -1,5 +1,6 @@
 package com.example.user_province.controller;
 
+import com.example.user_province.model.Province;
 import com.example.user_province.model.User;
 import com.example.user_province.service.UsersDAO;
 
@@ -15,7 +16,30 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        showSelectAll(request,response);
+        String action = request.getParameter("action");
+        if (action == null) {
+            action = "";
+        }
+        try {
+            switch (action) {
+                case "listUser":
+                    showSelectAll(request,response);
+                    break;
+                case "addUser":
+                    showAddForm(request, response);
+                    break;
+                default:
+                    showSelectAll(request,response);
+                    break;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void showAddForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("user/addUser.jsp");
+            dispatcher.forward(request, response);
     }
 
     private void showSelectAll(HttpServletRequest request, HttpServletResponse response) {
@@ -32,6 +56,16 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        addNewUser(request, response);
+    }
 
+    private void addNewUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String name = request.getParameter("name");
+        int provinceId = Integer.parseInt(request.getParameter("provinceId"));
+        Province province = usersDAO.selectProvince(provinceId);
+        User newUser = new User(name, province);
+        usersDAO.addUser(newUser);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("user/addUser.jsp");
+        dispatcher.forward(request, response);
     }
 }

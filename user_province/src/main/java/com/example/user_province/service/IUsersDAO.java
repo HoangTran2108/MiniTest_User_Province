@@ -8,4 +8,5 @@ import java.util.List;
 public interface IUsersDAO {
     List<User> selectAllUser();
     Province selectProvince(int p_id);
+    void addUser(User user);
 }

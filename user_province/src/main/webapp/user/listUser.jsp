@@ -31,6 +31,7 @@
             </tr>
         </c:forEach>
     </table>
+    <a href="/users?action=addUser">Add New User</a>
 </div>
 </body>
 </html>

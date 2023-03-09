@@ -5,7 +5,9 @@ public class User {
     String name;
     Province province;
 
-    public User() {
+    public User(String name, Province province) {
+        this.name = name;
+        this.province = province;
     }
 
     public User(int id, String name, Province province) {

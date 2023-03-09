@@ -20,6 +20,7 @@ public class UsersDAO implements IUsersDAO{
     }
     private String query1 = "{CALL select_province(?)}";
     private String query2 = "{CALL select_all_user()}";
+    private String query3 = "{CALL add_user(?,?)}";
     @Override
     public List<User> selectAllUser() {
         List<User> users = new ArrayList<>();
@@ -59,6 +60,20 @@ public class UsersDAO implements IUsersDAO{
             }
         }
         return null;
+    }
+
+    @Override
+    public void addUser(User user) {
+        if(connection != null){
+            try {
+                CallableStatement callableStatement = connection.prepareCall(query3);
+                callableStatement.setString(1, user.getName());
+                callableStatement.setInt(2, user.getProvince().getP_id());
+                callableStatement.executeUpdate();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
     }
 
 }
